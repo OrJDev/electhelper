@@ -5,6 +5,7 @@ import Navigation from './Navigation';
 import { useFonts } from '@use-expo/font';
 import { Paths } from './fonts';
 import { ActivityIndicator } from 'react-native';
+
 export default function App() {
   const [isReady] = useFonts(Paths)
   if (!isReady) {

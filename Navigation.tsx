@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { Home } from './pages';
+import { Logo } from './components';
+import { Formulas, Home } from './pages';
 import { RootStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -13,6 +14,7 @@ export default function RootNavigator() {
                 gestureEnabled: false
             }}>
                 <Stack.Screen name="Home" component={Home} />
+                <Stack.Screen name="Formulas" component={Formulas} />
             </Stack.Group>
         </Stack.Navigator>
     );

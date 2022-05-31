@@ -1,17 +1,20 @@
 import React from 'react';
-import { Clicker, KeysInput, KeysPicker, Logo } from '../../components';
+import { Clicker, KeysInput, KeysPicker, Wrapper } from '../../components';
 import styles from './styles';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { arrayToMap, defaultValues, transValues } from '../../functions/values';
+import { arrayToMap } from '../../functions/values';
 import { IOptionalFields, IOptionalKeys, IPossibleTypes, ITransistor, IValues } from '../../types/Values';
 import { isTransistor } from '../../functions/types';
+import { defaultValues, transValues } from '../../constants/stateValues';
+import { useNavigation } from '@react-navigation/native';
 
 interface IProps { }
 
 const Home: React.FC<IProps> = ({ }) => {
+    const navigation = useNavigation();
     let [displayType, setDisplayType] = React.useState<IPossibleTypes>('default');
     const [values, setValues] = React.useState<IValues>(() => arrayToMap(defaultValues));
     const [transistorValues, setTransistorValues] = React.useState<ITransistor>(() => arrayToMap(transValues))
+    let currentSate: IOptionalFields = isTransistor(displayType) ? transistorValues : values;
     function UpdateState(key: IOptionalKeys, value: number) {
         if (isTransistor(key, true)) {
             setTransistorValues(old => ({ ...old, [key]: value }))
@@ -19,10 +22,8 @@ const Home: React.FC<IProps> = ({ }) => {
             setValues(old => ({ ...old, [key]: value }))
         }
     }
-    let currentSate: IOptionalFields = isTransistor(displayType) ? transistorValues : values;
     return (
-        <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content}>
-            <Logo />
+        <Wrapper>
             <KeysPicker
                 selectedValue={displayType}
                 setValue={setDisplayType}
@@ -37,9 +38,9 @@ const Home: React.FC<IProps> = ({ }) => {
             <Clicker
                 label='Submit'
                 style={styles.top}
-                onPress={() => true}
+                onPress={() => navigation.navigate('Formulas', { currentSate })}
             />
-        </KeyboardAwareScrollView>
+        </Wrapper>
     )
 }
 

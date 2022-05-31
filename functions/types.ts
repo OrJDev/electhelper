@@ -1,5 +1,5 @@
 import { ITransistor, IValues } from "../types/Values";
-import { defaultValues, transValues } from "./values";
+import { defaultValues, transValues } from "../constants/stateValues";
 
 export const isTransistor = (type: any, b?: boolean): type is ITransistor => {
     return b ? transValues.indexOf(type) !== -1 : type === 'transistor';

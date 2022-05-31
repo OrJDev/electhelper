@@ -1,6 +1,7 @@
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { IOptionalFields } from './types/Values';
 
 declare global {
   namespace ReactNavigation {
@@ -10,6 +11,9 @@ declare global {
 
 export type RootStackParamList = {
   Home: undefined;
+  Formulas: {
+    currentSate: IOptionalFields;
+  }
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
