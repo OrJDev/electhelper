@@ -3,16 +3,23 @@ import { Clicker, KeysInput, KeysPicker, Logo } from '../../components';
 import styles from './styles';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { arrayToMap, defaultValues, transValues } from '../../functions/values';
+import { IOptionalFields, IOptionalKeys, IPossibleTypes, ITransistor, IValues } from '../../types/Values';
+import { isTransistor } from '../../functions/types';
 
 interface IProps { }
 
 const Home: React.FC<IProps> = ({ }) => {
-    let [displayType, setDisplayType] = React.useState<'transistor' | 'default'>('default');
-    const isTransistor = (type: typeof displayType): type is 'transistor' => type === 'transistor';
-    const [values, setValues] = React.useState(() => arrayToMap(defaultValues));
-    const [transistorValues, setTransistorValues] = React.useState(() => arrayToMap(transValues))
-    const getMapping = () => isTransistor(displayType) ? transistorValues : values;
-    const getUpdate = () => isTransistor(displayType) ? setTransistorValues : setValues;
+    let [displayType, setDisplayType] = React.useState<IPossibleTypes>('default');
+    const [values, setValues] = React.useState<IValues>(() => arrayToMap(defaultValues));
+    const [transistorValues, setTransistorValues] = React.useState<ITransistor>(() => arrayToMap(transValues))
+    function UpdateState(key: IOptionalKeys, value: number) {
+        if (isTransistor(key, true)) {
+            setTransistorValues(old => ({ ...old, [key]: value }))
+        } else {
+            setValues(old => ({ ...old, [key]: value }))
+        }
+    }
+    let currentSate: IOptionalFields = isTransistor(displayType) ? transistorValues : values;
     return (
         <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content}>
             <Logo />
@@ -23,9 +30,9 @@ const Home: React.FC<IProps> = ({ }) => {
                 values={['transistor', 'default']}
             />
             <KeysInput
-                keys={getMapping()}
+                keys={currentSate}
                 style={styles.smTop}
-                setItem={(key, val) => getUpdate()((old: any) => ({ ...old, [key]: val }))}
+                setItem={(key, val) => UpdateState(key, val)}
             />
             <Clicker
                 label='Submit'

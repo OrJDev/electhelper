@@ -47,5 +47,11 @@ export default StyleSheet.create({
         textDecorationLine: 'underline',
         textTransform: 'uppercase',
         margin: 5
+    },
+    row: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 5
     }
 })
