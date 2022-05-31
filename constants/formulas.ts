@@ -4,62 +4,62 @@ const forms: IForms[] = [
     {
         requirements: ["I", "U"],
         formulas: {
-            r: 'U / I',
-            p: 'U * I',
+            r: '::var|U / ::var|I',
+            p: '::var|U * ::var|I',
         }
     },
     {
         requirements: ["I", "R"],
         formulas: {
-            u: 'I * R',
-            p: 'I * I * R'
+            u: '::var|I * ::var|R',
+            p: '::var|I * ::var|I * ::var|R'
         }
     },
     {
         requirements: ["I", "P"],
         formulas: {
-            r: 'P / ( I * I)',
-            u: 'P / I'
+            r: '::var|P / ( ::var|I * ::var|I )',
+            u: '::var|P  / ::var|I'
         }
     },
     {
         requirements: ["U", "P"],
         formulas: {
-            i: "P / U",
-            r: "U * U / P"
+            i: "::var|P / ::var|U",
+            r: "::var|U * ::var|U / ::var|P"
         }
     },
     {
         requirements: ["U", "R"],
         formulas: {
-            i: "U / R",
-            p: 'U * U / R'
+            i: "::var|U / ::var|R",
+            p: '::var|U * ::var|U / ::var|R'
         }
     },
     {
         requirements: ["R", "P"],
         formulas: {
-            i: "√ P / R",
-            u: "√ P * R"
+            i: "Math.sqrt( ::var|P / ::var|R )",
+            u: "Math.sqrt( ::var|P  * ::var|R )"
         }
     },
     {
         requirements: ["Ib", "Ic"],
         formulas: {
-            ie: 'Ib + Ic'
+            ie: '::var|IB + ::var|IC'
         }
     },
     {
         requirements: ["Ic", "B"],
         formulas: {
-            ib: "Ic / b",
-            ie: "1 / B * Ic + 1 * Ic"
+            ib: "::var|IC / ::var|B",
+            ie: "1 / ::var|B * ::var|IC + 1 * ::var|IC"
         }
     },
     {
         requirements: ["Ib", "B"],
         formulas: {
-            ic: "Ib * B",
+            ic: "::var|IB * ::var|B",
         }
     }
 ]
