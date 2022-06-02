@@ -1,7 +1,7 @@
 import React from 'react';
 import { Clicker, KeysInput, KeysPicker, Wrapper } from '../../components';
 import styles from './styles';
-import { arrayToMap } from '../../functions/values';
+import { arrayToMap, getterAndSetter } from '../../functions/values';
 import { IOptionalFields, IOptionalKeys, IPossibleTypes, ITransistor, IValues } from '../../types/Values';
 import { isTransistor } from '../../functions/types';
 import { defaultValues, transValues } from '../../constants/stateValues';
@@ -11,34 +11,29 @@ interface IProps { }
 
 const Home: React.FC<IProps> = ({ }) => {
     const navigation = useNavigation();
-    let [displayType, setDisplayType] = React.useState<IPossibleTypes>('default');
+    let [displayType, setDisplayType] = React.useState<IPossibleTypes>('solver');
     const [values, setValues] = React.useState<IValues>(() => arrayToMap(defaultValues));
     const [transistorValues, setTransistorValues] = React.useState<ITransistor>(() => arrayToMap(transValues))
-    let currentSate: IOptionalFields = isTransistor(displayType) ? transistorValues : values;
-    function UpdateState(key: IOptionalKeys, value: number) {
-        if (isTransistor(key, true)) {
-            setTransistorValues(old => ({ ...old, [key]: value }))
-        } else {
-            setValues(old => ({ ...old, [key]: value }))
-        }
-    }
+
+    const [currentState, setCurrentState] =
+        getterAndSetter([setValues, setTransistorValues], [values, transistorValues], displayType);
     return (
         <Wrapper>
             <KeysPicker
                 selectedValue={displayType}
                 setValue={setDisplayType}
                 label='Display type'
-                values={['transistor', 'default']}
+                values={['transistor', 'solver']}
             />
             <KeysInput
-                keys={currentSate}
+                keys={currentState}
                 style={styles.smTop}
-                setItem={(key, val) => UpdateState(key, val)}
+                setItem={(key, val) => setCurrentState(old => ({ ...old, [key]: val }))}
             />
             <Clicker
                 label='Submit'
                 style={styles.top}
-                onPress={() => navigation.navigate('Formulas', { currentSate })}
+                onPress={() => navigation.navigate('Formulas', { currentState })}
             />
         </Wrapper>
     )

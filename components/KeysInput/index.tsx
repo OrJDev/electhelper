@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, ViewStyle } from 'react-native';
+import { Text, View, ViewStyle } from 'react-native';
+import fonts from '../../fonts';
 import KeyItem from './KeyItem';
 import styles from './styles';
 
@@ -10,15 +11,16 @@ interface IProps {
 }
 
 const KeysInput: React.FC<IProps> = ({ keys, setItem, style }) => {
+    let objectKeys = Object.keys(keys)
     return (
         <View style={[styles.container, style]}>
-            {Object.keys(keys).map((item, index) =>
+            {objectKeys.length ? objectKeys.map((item, index) =>
                 <KeyItem
                     setItem={setItem}
                     key={index}
                     value={keys[item]}
                     item={item}
-                />)}
+                />) : <Text style={{ ...fonts.h1, padding: 10 }}>No Keys To Input</Text>}
         </View>
 
     )

@@ -5,26 +5,25 @@ import { IOptionalFields } from "../types/Values";
 export const getFormulas = (valuesIHave: any[]): IForms[] =>
     formulas.filter(e => e.requirements.map(item => item.toLowerCase())
         .every(e => valuesIHave.indexOf(e) !== -1));
-export function solveFormula(formula: string, variables: IOptionalFields, isAdvanced?: boolean): [number, string, any[]] {
+export function getFormula(formula: string, variables: Partial<IOptionalFields>):
+    [string, string[]] {
     let ways: any[] = []
-    let newFormula = formula.split(' ').reduce((acc, curr) => {
-        if (curr.startsWith('::var')) {
+    return [formula.split(' ').reduce((acc, curr) => {
+        if (curr.startsWith('::var') && !curr.includes(':act') && !curr.endsWith('@')) {
             let variable = curr.split('|')[1];
             let value = variables[variable.toLowerCase() as keyof typeof variables]
             ways.push(`${variable} = ${value}`)
             return acc + ` ${value}`;
         }
         return acc + ` ${curr}`;
-    }, '');
-    let results = eval(newFormula);
-    if (results.toString().indexOf('.') !== -1) {
-        results = results.toFixed(2);
-    }
-    return [results, newFormula, ways];
+    }, ''), ways];
 }
+
 export const formatFormula = (formula: string) => {
     return formula.replaceAll('::var|', ''
-    ).replaceAll('Math.sqrt(', '√(');
+    ).replaceAll('Math.sqrt(', '√(')
+        .replaceAll(':act::', '').
+        replaceAll('&', '').replaceAll('@', '')
 }
 export function getUnits(type: any) {
     switch (type.substring(0, 1).toLowerCase()) {

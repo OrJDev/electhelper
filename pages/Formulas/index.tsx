@@ -10,8 +10,8 @@ interface IProps extends RootStackScreenProps<'Formulas'> { }
 
 const Formulas: React.FC<IProps> = ({ route, navigation }) => {
     const [formulas, setFormulas] = React.useState<IForms[]>([]);
-    const { currentSate } = route.params;
-    const variables = React.useMemo<IOptionalFields>(() => valuesIHave(currentSate) as any, [currentSate]);
+    const { currentState } = route.params;
+    const variables = React.useMemo<IOptionalFields>(() => valuesIHave(currentState) as any, [currentState]);
     React.useEffect(() => {
         const myValuesKeys = Object.keys(variables).map(item => item.toLowerCase())
         setFormulas(getFormulas(myValuesKeys));
@@ -23,11 +23,12 @@ const Formulas: React.FC<IProps> = ({ route, navigation }) => {
                 key={'f-' + id}
                 formulas={formulas}
                 last={id === formulas.length - 1}
-                onPress={(formula, sFor) => {
+                onPress={(formula, sFor, sType) => {
                     navigation.navigate('Results', {
                         formula: formula,
                         variables,
-                        sFor
+                        sFor,
+                        sType
                     })
                 }}
             />

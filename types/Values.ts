@@ -1,5 +1,5 @@
 import { ConvertToMap, IKeyA } from "./Static";
-export type IPossibleTypes = IKeyA<['transistor', 'default']>;
+export type IPossibleTypes = IKeyA<['transistor', 'solver']>;
 
 export type ITransistorKeys = IKeyA<['vcc', 'b', 'rb', 'ib', 'rc', 'ic', 're', 'ie', 'vce', 'vbe']>
 export type ITransistor = ConvertToMap<ITransistorKeys, number>

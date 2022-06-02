@@ -2,7 +2,6 @@ import { StyleSheet } from 'react-native';
 import fonts from '../../fonts';
 
 export default StyleSheet.create({
-
     req: {
         flexDirection: 'row',
         marginTop: 10
@@ -10,7 +9,8 @@ export default StyleSheet.create({
     reItem: {
         ...fonts.h2,
         color: 'gray',
-        marginRight: 3
+        marginRight: 3,
+        textTransform: 'uppercase'
     },
     reContainer: {
         flexDirection: 'row',

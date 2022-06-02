@@ -3,5 +3,13 @@ export type IForms = {
     formulas: {
         [key: string]: string
     },
-    advanced?: boolean
+    type: IFormType;
+}
+
+
+export type IFormType = 'compare' | 'solve';
+
+export type IWays = {
+    f: string,
+    myMap?: any;
 }

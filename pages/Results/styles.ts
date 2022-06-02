@@ -17,5 +17,11 @@ export default StyleSheet.create({
     center: {
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    ways: {
+        borderWidth: 2,
+        borderColor: 'magenta',
+        padding: 5,
+        borderRadius: 10
     }
 })
