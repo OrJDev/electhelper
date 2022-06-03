@@ -15,7 +15,7 @@ const Results: React.FC<IProps> = ({ route, navigation }) => {
     const { variables, formula, sFor, sType } = route.params;
     let [status, setStatus] = React.useState<'calculating' | 'calculated'>('calculating');
     const [results, setResults] = React.useState<[number, string, any[], string]>([0, '', [], ''])
-    let ways = React.useMemo(() => getWays(formula, results, sFor), [formula, results, sFor])
+    let ways = React.useMemo(() => getWays(formula, results), [formula, results, sFor])
     React.useEffect(() => {
         let res = solveForm(formula, variables, sType)
         setResults([...res, getUnits(sFor) as string])

@@ -131,6 +131,34 @@ const forms: IForms[] = [
         },
         type: 'compare'
     },
+    {
+        requirements: ['re', 'hfe', 'hie'],
+        formulas: {
+            "ri": "::var|HIE + ( 1 + ::var|HFE ) * ::var|RE"
+        },
+        type: 'solve'
+    },
+    {
+        requirements: ['rl', 'rc'],
+        formulas: {
+            'rlt': "( ::var|RL * ::var|RC ) / ( ::var|RL + ::var|RC )"
+        },
+        type: 'solve'
+    },
+    {
+        requirements: ['hfe', 'rlt', 'ri'],
+        formulas: {
+            'av': '-1 * ( ( ::var|HFE * ::var|RLT ) / ::var|RI )'
+        },
+        type: 'solve'
+    },
+    {
+        requirements: ['hfe', 'rlt', 'hie'],
+        formulas: {
+            'av': '-1 * ( ( ::var|HFE * ::var|RLT ) / ::var|HIE )'
+        },
+        type: 'solve'
+    }
 ]
 
 export default forms;

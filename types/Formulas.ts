@@ -8,8 +8,3 @@ export type IForms = {
 
 
 export type IFormType = 'compare' | 'solve';
-
-export type IWays = {
-    f: string,
-    myMap?: any;
-}

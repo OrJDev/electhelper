@@ -1,5 +1,5 @@
 import React from 'react';
-import { Clicker, KeysInput, KeysPicker, Wrapper } from '../../components';
+import { ArrowBack, Clicker, KeysInput, KeysPicker, Wrapper } from '../../components';
 import styles from './styles';
 import { arrayToMap, getterAndSetter } from '../../functions/values';
 import { IOptionalFields, IOptionalKeys, IPossibleTypes, ITransistor, IValues } from '../../types/Values';
@@ -17,8 +17,12 @@ const Home: React.FC<IProps> = ({ }) => {
 
     const [currentState, setCurrentState] =
         getterAndSetter([setValues, setTransistorValues], [values, transistorValues], displayType);
+    function clearState() {
+        let newVal = arrayToMap(isTransistor(displayType) ? transValues : defaultValues);
+        setCurrentState(newVal)
+    }
     return (
-        <Wrapper>
+        <Wrapper arrow={<ArrowBack name='delete' onPress={clearState} />}>
             <KeysPicker
                 selectedValue={displayType}
                 setValue={setDisplayType}

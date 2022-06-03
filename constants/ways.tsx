@@ -1,9 +1,9 @@
 import { Text } from "react-native";
 import fonts from "../fonts";
 import { ISolverResults } from "../functions/math";
-import { IWays } from "../types/Formulas";
+import { IWays } from "../types/Math";
 
-export default (formula: string, results: [...ISolverResults, string], sFor: string): IWays[] => {
+export default (formula: string, results: [...ISolverResults, string]): IWays[] => {
     return [
         {
             f: formula,
