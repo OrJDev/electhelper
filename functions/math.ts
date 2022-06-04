@@ -52,11 +52,14 @@ export function solveTransistor(formula: string, variables: Partial<IOptionalFie
             }
         }
     }
-    var equation = new algebra.Equation(myExp,
-        parseFloat(myEquator ?? '0')
-    )
-    let eq = equation.toString()
-    let [results, form] = getResults(equation.solveFor(sFor.toLowerCase()), eq, sFor)
+    var equation = myEquator?.indexOf('.') !== -1 ?
+        undefined
+        :
+        new algebra.Equation(myExp, parseFloat(myEquator ?? '0'));
+    var eq = myEquator?.indexOf('.') !== -1 ? `${myExp.toString()} = ${myEquator}`
+        :
+        equation!.toString();
+    let [results, form] = getResults(equation?.solveFor(sFor.toLowerCase()), eq, sFor)
     return [results, form, ways];
 }
 
