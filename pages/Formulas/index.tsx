@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowBack, Formula, Wrapper } from '../../components';
+import MContext from '../../context';
 import { getFormulas } from '../../functions/formulas';
 import { valuesIHave } from '../../functions/values';
 import { RootStackScreenProps } from '../../types';
@@ -11,12 +12,14 @@ interface IProps extends RootStackScreenProps<'Formulas'> { }
 const Formulas: React.FC<IProps> = ({ route, navigation }) => {
     const [formulas, setFormulas] = React.useState<IForms[]>([]);
     const { currentState } = route.params;
+    const { ignoreValues } = React.useContext(MContext);
     const variables = React.useMemo<IValues>(() =>
         valuesIHave(currentState) as any, [currentState]);
     React.useEffect(() => {
         const myValuesKeys = Object.keys(variables).map(item => item.toLowerCase())
-        setFormulas(getFormulas(myValuesKeys));
+        setFormulas(getFormulas(myValuesKeys, ignoreValues));
     }, [])
+
     return (
         <Wrapper arrow={<ArrowBack onPress={() => navigation.goBack()} />}>
             {formulas.map((item, id) => <Formula

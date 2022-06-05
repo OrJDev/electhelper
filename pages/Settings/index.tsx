@@ -1,20 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Text, View } from 'react-native';
-import { Wrapper } from '../../components';
+import { Switch, Wrapper } from '../../components';
+import MContext from '../../context';
 import styles from './styles';
 
 interface IProps { }
 
-/**
- * 
- * @unimplemented
- */
+
 const Settings: React.FC<IProps> = ({ }) => {
+    const { ignoreValues, setIgnoreValues } = React.useContext(MContext);
     return (
         <Wrapper>
-            <Text style={styles.txt}>
-            unimplemented
-            </Text>
+            <Switch label='Ignore Values I Have' isVisible={ignoreValues} setIsVisible={setIgnoreValues} />
         </Wrapper>
     )
 }

@@ -6,3 +6,4 @@ export { default as KeysPicker } from "./KeysPicker"
 export { default as Wrapper } from "./Wrapper";
 export { default as Formula } from "./Formula"
 export { default as ArrowBack } from "./ArrowBack";
+export { default as Switch } from "./Switch"

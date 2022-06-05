@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowBack, Clicker, KeysInput, KeysPicker, Wrapper } from '../../components';
 import styles from './styles';
-import { getterAndSetter, requirementsValues } from '../../functions/values';
+import { getterAndSetter } from '../../functions/values';
 import { IPossibleTypes, ITransistor, IValues } from '../../types/Values';
 import { isTransistor } from '../../functions/values';
 import { defaultValues, transValues } from '../../constants/stateValues';

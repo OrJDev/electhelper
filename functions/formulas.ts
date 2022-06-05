@@ -2,9 +2,23 @@ import formulas from "../constants/formulas"
 import { IForms } from "../types/formulas"
 import { IOptionalFields } from "../types/Values";
 
-export const getFormulas = (valuesIHave: any[]): IForms[] =>
-    formulas.filter(e => e.requirements.map(item => item.toLowerCase())
+export const getFormulas = (valuesIHave: any[], ignore?: boolean): IForms[] => {
+    let results = formulas.filter(e => e.requirements.map(item => item.toLowerCase())
         .every(e => valuesIHave.indexOf(e) !== -1));
+    if (ignore) {
+        let newResults = []
+        for (const element of results) {
+            let temp: any = {}
+            let keys = Object.keys(element.formulas).
+                filter(e => valuesIHave.indexOf(e) === -1);
+            if (keys.length === 0) continue;
+            keys.forEach(key => temp[key] = element.formulas[key])
+            newResults.push({ ...element, formulas: temp })
+        }
+        results = newResults;
+    }
+    return results;
+}
 export function getFormula(formula: string, variables: Partial<IOptionalFields>):
     [string, string[]] {
     let ways: any[] = []

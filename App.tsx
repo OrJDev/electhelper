@@ -5,6 +5,7 @@ import Navigation from './navigation';
 import { useFonts } from '@use-expo/font';
 import { Paths } from './constants/fonts';
 import { ActivityIndicator } from 'react-native';
+import { ContextProvider } from './context';
 
 export default function App() {
   const [isReady] = useFonts(Paths)
@@ -13,10 +14,12 @@ export default function App() {
   } else {
     return (
       <SafeAreaProvider>
-        <NavigationContainer>
-          <Navigation />
-        </NavigationContainer>
-        <StatusBar />
+        <ContextProvider>
+          <NavigationContainer>
+            <Navigation />
+          </NavigationContainer>
+        </ContextProvider>
+        <StatusBar hidden />
       </SafeAreaProvider>
     );
   }
