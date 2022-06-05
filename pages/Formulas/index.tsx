@@ -4,14 +4,14 @@ import { getFormulas } from '../../functions/formulas';
 import { valuesIHave } from '../../functions/values';
 import { RootStackScreenProps } from '../../types';
 import { IForms } from '../../types/Formulas';
-import { IOptionalFields } from '../../types/Values';
+import { IValues } from '../../types/Values';
 
 interface IProps extends RootStackScreenProps<'Formulas'> { }
 
 const Formulas: React.FC<IProps> = ({ route, navigation }) => {
     const [formulas, setFormulas] = React.useState<IForms[]>([]);
     const { currentState } = route.params;
-    const variables = React.useMemo<IOptionalFields>(() =>
+    const variables = React.useMemo<IValues>(() =>
         valuesIHave(currentState) as any, [currentState]);
     React.useEffect(() => {
         const myValuesKeys = Object.keys(variables).map(item => item.toLowerCase())

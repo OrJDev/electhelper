@@ -6,11 +6,12 @@ import styles from './styles';
 interface IProps {
     onPress: () => void;
     name?: string;
+    right?: boolean;
 }
 
-const ArrowBack: React.FC<IProps> = ({ onPress, name }) => {
+const ArrowBack: React.FC<IProps> = ({ onPress, name, right }) => {
     return (
-        <TouchableOpacity style={styles.container} onPress={onPress}>
+        <TouchableOpacity style={[styles.container, styles[right ? 'right' : 'left']]} onPress={onPress}>
             <AntDesign name={name ? name as any : 'arrowleft'} size={30} color='black' />
         </TouchableOpacity>
     )

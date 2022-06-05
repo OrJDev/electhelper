@@ -8,10 +8,8 @@ export default {
     body4: { fontFamily: "Poppins-Regular", fontSize: 14, lineHeight: 22 },
 };
 
-
 export const Paths = {
-    "Poppins-Black": require("./assets/fonts/Poppins-Black.ttf"),
-    "Poppins-Bold": require("./assets/fonts/Poppins-Bold.ttf"),
-    "Poppins-SemiBold": require("./assets/fonts/Poppins-SemiBold.ttf"),
-    "Poppins-Regular": require("./assets/fonts/Poppins-SemiBold.ttf"),
+    "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
+    "Poppins-SemiBold": require("../assets/fonts/Poppins-SemiBold.ttf"),
+    "Poppins-Regular": require("../assets/fonts/Poppins-Regular.ttf"),
 };

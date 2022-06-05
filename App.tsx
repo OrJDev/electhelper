@@ -1,9 +1,9 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import Navigation from './Navigation';
+import Navigation from './navigation';
 import { useFonts } from '@use-expo/font';
-import { Paths } from './fonts';
+import { Paths } from './constants/fonts';
 import { ActivityIndicator } from 'react-native';
 
 export default function App() {

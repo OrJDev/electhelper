@@ -12,7 +12,10 @@ export function getFormula(formula: string, variables: Partial<IOptionalFields>)
         if (curr.startsWith('::var') && !curr.includes(':act') && !curr.endsWith('@')) {
             let variable = curr.split('|')[1];
             let value = variables[variable.toLowerCase() as keyof typeof variables]
-            ways.push(`${variable} = ${value}`)
+            let pusher = `${variable} = ${value} ${getUnits(variable)}`;
+            if (!ways.includes(pusher)) {
+                ways.push(pusher)
+            }
             return acc + ` ${value}`;
         }
         return acc + ` ${curr}`;
@@ -30,10 +33,13 @@ export function getUnits(type: any) {
         case 'i':
             return 'Ampere (A)';
         case 'u':
+        case 'v':
             return 'Volt (V)';
         case 'p':
             return 'Watt (W)';
         case 'r':
             return 'Ohm (Ω)';
+        default:
+            return '(?)'
     }
 }

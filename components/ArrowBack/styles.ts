@@ -9,7 +9,12 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         position: 'absolute',
-        top: 20,
+        top: 30,
+    },
+    left: {
         left: 20
+    },
+    right: {
+        right: 20
     }
 })

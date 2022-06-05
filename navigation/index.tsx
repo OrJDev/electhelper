@@ -1,23 +1,26 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { Logo } from './components';
-import { Formulas, Home } from './pages';
-import Results from './pages/Results';
-import { RootStackParamList } from './types';
+import { Formulas, Results } from '../pages';
+import { RootStackParamList } from '../types';
+import TabsNavigator from './TabsNavigator';
+
+interface IProps { }
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-export default function RootNavigator() {
+const Navigation: React.FC<IProps> = ({ }) => {
     return (
-        <Stack.Navigator initialRouteName='Home'>
+        <Stack.Navigator initialRouteName='Tabs'>
             <Stack.Group screenOptions={{
                 headerShown: false,
                 gestureEnabled: false
             }}>
-                <Stack.Screen name="Home" component={Home} />
+                <Stack.Screen name="Tabs" component={TabsNavigator} />
                 <Stack.Screen name="Results" component={Results} />
                 <Stack.Screen name="Formulas" component={Formulas} />
             </Stack.Group>
         </Stack.Navigator>
-    );
+    )
 }
+
+export default Navigation;

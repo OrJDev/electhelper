@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View, ViewStyle } from 'react-native';
-import fonts from '../../fonts';
+import fonts from '../../constants/fonts';
 import KeyItem from './KeyItem';
 import styles from './styles';
 

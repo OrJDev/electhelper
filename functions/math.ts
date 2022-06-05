@@ -58,7 +58,7 @@ export function solveTransistor(formula: string, variables: Partial<IOptionalFie
         new algebra.Equation(myExp, parseFloat(myEquator ?? '0'));
     var eq = myEquator?.indexOf('.') !== -1 ? `${myExp.toString()} = ${myEquator}`
         :
-        equation!.toString();
+        equation?.toString() ?? ``;
     let [results, form] = getResults(equation?.solveFor(sFor.toLowerCase()), eq, sFor)
     return [results, form, ways];
 }

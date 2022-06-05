@@ -2,7 +2,7 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { IFormType } from './types/Formulas';
-import { IOptionalFields, IOptionalKeys, IPossibleTypes } from './types/Values';
+import { IOptionalFields } from './types/Values';
 
 declare global {
   namespace ReactNavigation {
@@ -11,15 +11,13 @@ declare global {
 }
 
 export type RootStackParamList = {
-  Home: undefined;
+  Tabs: undefined;
   Formulas: {
     currentState: IOptionalFields;
   };
   Results: {
     formula: string;
-    variables: {
-      [key in IOptionalKeys]?: number;
-    };
+    variables: Partial<IOptionalFields>;
     sFor: string;
     sType: IFormType;
   }
@@ -31,6 +29,8 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> = Nati
 >;
 
 export type RootTabParamList = {
+  Home: undefined;
+  Settings: undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> = CompositeScreenProps<

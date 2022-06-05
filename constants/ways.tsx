@@ -1,5 +1,5 @@
 import { Text } from "react-native";
-import fonts from "../fonts";
+import fonts from "./fonts";
 import { ISolverResults } from "../functions/math";
 import { IWays } from "../types/Math";
 

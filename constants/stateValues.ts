@@ -1,2 +1,27 @@
-export const transValues = ['vcc', 'b', 'rb', 'ib', 'rc', 'ic', 're', 'ie', 'vce', 'vbe', 'hfe', 'hie', 'ri', 'rl', 'rlt']
-export const defaultValues = ['u', 'r', 'i', 'p']
+export const defaultValues = {
+    u: NaN,
+    r: NaN,
+    i: NaN,
+    p: NaN,
+    vo: NaN,
+    vin: NaN
+}
+
+export const transValues = {
+    vcc: NaN,
+    b: NaN,
+    rb: NaN,
+    ib: NaN,
+    rc: NaN,
+    ic: NaN,
+    re: NaN,
+    ie: NaN,
+    vce: NaN,
+    vbe: NaN,
+    hfe: NaN,
+    hie: NaN,
+    ri: NaN,
+    rl: NaN,
+    rlt: NaN
+}
+
