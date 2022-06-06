@@ -12,13 +12,14 @@ interface IProps {
     onPress: (form: string, sFor: string, sType: IFormType) => void;
     item: IForms;
     last: boolean;
+    title?: string;
 }
-
-export const SingleFormula = ({ sFor, onPress, formula }: {
+interface ISingleProps {
     sFor: string;
     onPress: () => void;
     formula: string;
-}) => {
+}
+export const SingleFormula = ({ sFor, onPress, formula }: ISingleProps) => {
     return (
         <Clicker
             label={sFor}
@@ -30,15 +31,15 @@ export const SingleFormula = ({ sFor, onPress, formula }: {
         </Clicker>
     )
 }
-const Formula: React.FC<IProps> = ({ onPress, item, last, formulas }) => {
+const Formula: React.FC<IProps> = ({ onPress, item, last, formulas, title }) => {
     return (
         <View style={styles.center}>
-            <Requirements requirements={item.requirements} />
+            <Requirements title={title} requirements={item.requirements} />
             {Object.keys(item.formulas).map((formula, formIndex) => {
                 return (
                     <SingleFormula
                         key={'form-' + formIndex}
-                        formula={formatFormula(item.formulas[formula])}
+                        formula={formatFormula(item.formulas[formula], true)}
                         sFor={formula}
                         onPress={() => onPress(item.formulas[formula], formula, item.type)} />
                 )

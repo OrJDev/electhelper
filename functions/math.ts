@@ -1,13 +1,13 @@
 import { IOptionalFields } from "../types/Values";
-import { getFormula } from "./formulas";
+import { getFormula, getUnits } from "./formulas";
 import algebra from 'algebra.js';
 import { IFormType } from "../types/Formulas";
 import { INode } from "../types/Math";
 
 export type ISolverResults = [number, string, any[]];
 
-export function solveSolver(formula: string, variables: Partial<IOptionalFields>): ISolverResults {
-    let [newFormula, ways] = getFormula(formula, variables);
+export function solveSolver(formula: string, variables: Partial<IOptionalFields>, includeUnits?: boolean): ISolverResults {
+    let [newFormula, ways] = getFormula(formula, variables, includeUnits);
     let results = eval(newFormula);
     if (results.toString().indexOf('.') !== -1) {
         results = results.toFixed(2);
@@ -15,8 +15,8 @@ export function solveSolver(formula: string, variables: Partial<IOptionalFields>
     return [results, newFormula, ways];
 }
 
-export function solveTransistor(formula: string, variables: Partial<IOptionalFields>): ISolverResults {
-    let [newFormula, ways] = getFormula(formula, variables);
+export function solveTransistor(formula: string, variables: Partial<IOptionalFields>, includeUnits?: boolean): ISolverResults {
+    let [newFormula, ways] = getFormula(formula, variables, includeUnits);
     let sFor = getSFor(newFormula)
     if (!sFor) return solveSolver(formula, variables)
     type IKey = keyof typeof variables
@@ -31,7 +31,10 @@ export function solveTransistor(formula: string, variables: Partial<IOptionalFie
             if (current.endsWith('@')) {
                 let fixedVarName = shiftVarName(varName);
                 let currentVar = parseFloat(variables[fixedVarName?.toLowerCase() as IKey] ?? '0');
-                ways.push(`${fixedVarName} = ${currentVar}`)
+                let pusher = `${fixedVarName} = ${currentVar} ${includeUnits ? getUnits(fixedVarName) : ''}`
+                if (!ways.includes(pusher)) {
+                    ways.push(pusher)
+                }
                 if (action === '+' &&
                     getNode(myElement[i + 1])?.
                         action !== '*'
@@ -64,13 +67,16 @@ export function solveTransistor(formula: string, variables: Partial<IOptionalFie
 }
 
 
-export function solveForm(formula: string, variables: Partial<IOptionalFields>, solverType: IFormType):
+export function solveForm(formula: string,
+    variables: Partial<IOptionalFields>,
+    solverType: IFormType,
+    includeUnits?: boolean):
     ISolverResults {
     switch (solverType) {
         case 'compare':
-            return solveTransistor(formula, variables);
+            return solveTransistor(formula, variables, includeUnits);
         case 'solve':
-            return solveSolver(formula, variables);
+            return solveSolver(formula, variables, includeUnits);
     }
 }
 

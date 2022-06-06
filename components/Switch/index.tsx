@@ -6,7 +6,7 @@ import styles from './styles';
 
 interface IProps {
     isVisible: boolean;
-    setIsVisible: React.Dispatch<SetStateAction<boolean>>;
+    setIsVisible: (val: boolean) => void;
     label: string;
 }
 
@@ -16,7 +16,7 @@ const Switch: React.FC<IProps> = ({ setIsVisible, isVisible, label }) => {
         <>
             <Text style={styles.txt}>{label}</Text>
             <View style={styles.wrapper}>
-                <ATouchableOpacity onPress={() => setIsVisible(e => !e)}
+                <ATouchableOpacity onPress={() => setIsVisible(!isVisible)}
                     style={[styles.switch, {
                         backgroundColor: interpolateColor(isVisible ? 1 : 0,
                             [0, 1],

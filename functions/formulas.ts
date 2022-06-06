@@ -19,14 +19,14 @@ export const getFormulas = (valuesIHave: any[], ignore?: boolean): IForms[] => {
     }
     return results;
 }
-export function getFormula(formula: string, variables: Partial<IOptionalFields>):
+export function getFormula(formula: string, variables: Partial<IOptionalFields>, includeUnits?: boolean):
     [string, string[]] {
     let ways: any[] = []
     return [formula.split(' ').reduce((acc, curr) => {
         if (curr.startsWith('::var') && !curr.includes(':act') && !curr.endsWith('@')) {
             let variable = curr.split('|')[1];
             let value = variables[variable.toLowerCase() as keyof typeof variables]
-            let pusher = `${variable} = ${value} ${getUnits(variable)}`;
+            let pusher = `${variable} = ${value} ${includeUnits ? getUnits(variable) : ''}`;
             if (!ways.includes(pusher)) {
                 ways.push(pusher)
             }
@@ -36,11 +36,22 @@ export function getFormula(formula: string, variables: Partial<IOptionalFields>)
     }, ''), ways];
 }
 
-export const formatFormula = (formula: string) => {
-    return formula.replaceAll('::var|', ''
-    ).replaceAll('Math.sqrt(', '√(')
+export const formatFormula = (formula: string, s?: boolean) => {
+    let newFormula = formula.replaceAll('::var|', '').
+        replaceAll('Math.sqrt', '√')
         .replaceAll(':act::', '').
-        replaceAll('&', '').replaceAll('@', '')
+        replaceAll('&', '')
+        .replaceAll('@', '')
+    if (s) {
+        let str = newFormula.split('').reduce((acc, curr) => {
+            if (/[a-zA-Z]/.test(curr) || !isNaN(parseInt(curr))) {
+                acc += curr;
+            } else acc += ` ${curr} `;
+            return acc;
+        }, '')
+        newFormula = str.replace(/\s{2,}/g, ' ');
+    }
+    return newFormula;
 }
 export function getUnits(type: any) {
     switch (type.substring(0, 1).toLowerCase()) {

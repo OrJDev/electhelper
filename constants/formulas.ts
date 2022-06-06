@@ -90,6 +90,7 @@ const forms: IForms[] = [
     },
     {
         requirements: ["vcc", 'vbe', 'ib'],
+        title: 'Without RE',
         formulas: {
             "rb": "::var|VCC = ::var|IB :act::*&RB  :act::+&::var|VBE@",
         },
@@ -98,6 +99,7 @@ const forms: IForms[] = [
     },
     {
         requirements: ["vcc", 'vbe', 'ib', 're', 'ie'],
+        title: 'With RE',
         formulas: {
             "rb": "::var|VCC = ::var|IB :act::*&RB  :act::+&::var|VBE@ :act::+&::var|RE@ :act::*&::var|IE@",
         },
@@ -106,6 +108,7 @@ const forms: IForms[] = [
     },
     {
         requirements: ["vcc", 'vbe', 'rb'],
+        title: 'Without RE',
         formulas: {
             "ib": "::var|VCC = ::var|RB :act::*&IB  :act::+&::var|VBE@",
         },
@@ -114,6 +117,7 @@ const forms: IForms[] = [
     },
     {
         requirements: ["vcc", 'vbe', 'rb', 're', 'ie'],
+        title: 'With RE',
         formulas: {
             "ib": "::var|VCC = ::var|RB :act::*&IB  :act::+&::var|VBE@ :act::+&::var|RE@ :act::*&::var|IE@",
         },
@@ -122,6 +126,7 @@ const forms: IForms[] = [
     },
     {
         requirements: ["vcc", 'vce', 'ic'],
+        title: 'Without RE',
         formulas: {
             "rc": "::var|VCC = ::var|IC :act::*&RC  :act::+&::var|VCE@",
         },
@@ -130,6 +135,7 @@ const forms: IForms[] = [
     },
     {
         requirements: ["vcc", 'vce', 'ic', 're', 'ie'],
+        title: 'With RE',
         formulas: {
             "rc": "::var|VCC = ::var|IC :act::*&RC  :act::+&::var|VCE@ :act::+&::var|RE@ :act::*&::var|IE@",
         },
@@ -138,6 +144,7 @@ const forms: IForms[] = [
     },
     {
         requirements: ["vcc", 'vce', 'rc'],
+        title: 'Without RE',
         formulas: {
             "ic": "::var|VCC = ::var|RC :act::*&IC  :act::+&::var|VCE@",
         },
@@ -146,6 +153,7 @@ const forms: IForms[] = [
     },
     {
         requirements: ["vcc", 'vce', 'rc', 're', 'ie'],
+        title: 'With RE',
         formulas: {
             "ic": "::var|VCC = ::var|RC :act::*&IC  :act::+&::var|VCE@ :act::+&::var|RE@ :act::*&::var|IE@",
         },
@@ -154,6 +162,7 @@ const forms: IForms[] = [
     },
     {
         requirements: ['re', 'hfe', 'hie'],
+        title: 'With RE',
         formulas: {
             "ri": "::var|HIE + ( 1 + ::var|HFE ) * ::var|RE"
         },
@@ -170,6 +179,7 @@ const forms: IForms[] = [
     },
     {
         requirements: ['hfe', 'rlt', 'ri'],
+        title: 'With RE',
         formulas: {
             'uav': '-1 * ( ( ::var|HFE * ::var|RLT ) / ::var|RI )'
         },
@@ -178,6 +188,7 @@ const forms: IForms[] = [
     },
     {
         requirements: ['hfe', 'rlt', 'hie'],
+        title: 'Without RE',
         formulas: {
             'uav': '-1 * ( ( ::var|HFE * ::var|RLT ) / ::var|HIE )'
         },

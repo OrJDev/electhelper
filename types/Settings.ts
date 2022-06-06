@@ -1,3 +1,5 @@
 export default interface ISettings {
-    ignoreValues?: boolean;
+    ignoreValues: boolean;
+    includeUnits: boolean;
+    holdForModal: boolean;
 }

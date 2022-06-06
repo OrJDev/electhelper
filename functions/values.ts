@@ -1,7 +1,7 @@
 import React from "react";
 import forms from "../constants/formulas";
 import { transValues } from "../constants/stateValues";
-import { ICategory } from "../types/Formulas";
+import { ICategory, IForms } from "../types/Formulas";
 import { IOptionalFields, IPossibleTypes, ITransistor, IValues } from "../types/Values";
 
 export const arrayToMap = (arr: any[]) => arr.reduce((acc, key) => {
@@ -52,3 +52,15 @@ export const requirementsValues = (category: ICategory): { [key: string]: number
     return currentValues;
 }
 
+export const filterdValues = (wantedKeys: string[]): IForms[] => {
+    let newResults: IForms[] = []
+    for (const element of forms) {
+        let temp: any = {}
+        let keys = Object.keys(element.formulas).
+            filter(e => wantedKeys.indexOf(e) !== -1);
+        if (keys.length === 0) continue;
+        keys.forEach(key => temp[key] = element.formulas[key])
+        newResults.push({ ...element, formulas: temp })
+    }
+    return newResults;
+}

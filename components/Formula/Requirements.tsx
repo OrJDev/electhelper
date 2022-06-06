@@ -3,10 +3,11 @@ import { Text, View } from 'react-native';
 import styles from './styles';
 
 interface IProps {
-    requirements: any[]
+    requirements: any[];
+    title?: string;
 }
 
-const Requirements: React.FC<IProps> = ({ requirements }) => {
+const Requirements: React.FC<IProps> = ({ requirements, title }) => {
     return (
         <View style={styles.req}>
             {requirements.map((req, reIndex) => {
@@ -15,10 +16,14 @@ const Requirements: React.FC<IProps> = ({ requirements }) => {
                         <Text style={styles.reItem}>
                             {req}
                         </Text>
-                        {reIndex !== requirements.length - 1 &&
+                        {reIndex !== requirements.length - 1 ?
                             <Text style={styles.plus}>
                                 +
-                            </Text>}
+                            </Text> : <>
+                                <Text style={styles.plus}>(</Text>
+                                <Text style={[styles.reItem, { color: 'magenta' }]}>{title}</Text>
+                                <Text style={styles.plus}>)</Text>
+                            </>}
                     </View>
                 )
             })}

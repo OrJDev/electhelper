@@ -4,6 +4,7 @@ import { dots, number } from '../../functions/transform';
 import ModalContainer from '../ModalContainer';
 import styles from './styles';
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons"
+import MContext from '../../context';
 
 interface IProps {
     item: any;
@@ -12,6 +13,7 @@ interface IProps {
 }
 
 const KeyItem: React.FC<IProps> = ({ item, value, setItem }) => {
+    const { holdForModal } = React.useContext(MContext)
     const ref = React.createRef<TextInput>();
     const [showFullNum, setShowFullNum] = React.useState(false);
     function toggleFocus(toggle: boolean) {
@@ -24,7 +26,7 @@ const KeyItem: React.FC<IProps> = ({ item, value, setItem }) => {
     return (
         <Pressable
             onPress={() => toggleFocus(true)}
-            onLongPress={() => setShowFullNum(true)}
+            {...holdForModal.get ? { onLongPress: () => setShowFullNum(true) } : {}}
             style={styles.wrapper}>
             <Text style={styles.text}>{item}</Text>
             <Text style={styles.equals}> = </Text>

@@ -21,6 +21,10 @@ export default StyleSheet.create({
         ...fonts.h3,
         color: 'black'
     },
+    title: {
+        ...fonts.h3,
+        textDecorationLine: 'underline',
+    },
     center: {
         alignItems: 'center'
     },

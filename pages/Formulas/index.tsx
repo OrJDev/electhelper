@@ -17,13 +17,14 @@ const Formulas: React.FC<IProps> = ({ route, navigation }) => {
         valuesIHave(currentState) as any, [currentState]);
     React.useEffect(() => {
         const myValuesKeys = Object.keys(variables).map(item => item.toLowerCase())
-        setFormulas(getFormulas(myValuesKeys, ignoreValues));
+        setFormulas(getFormulas(myValuesKeys, ignoreValues.get));
     }, [])
 
     return (
         <Wrapper arrow={<ArrowBack onPress={() => navigation.goBack()} />}>
             {formulas.map((item, id) => <Formula
                 item={item}
+                title={item.title}
                 key={'f-' + id}
                 formulas={formulas}
                 last={id === formulas.length - 1}

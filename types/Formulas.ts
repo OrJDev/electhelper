@@ -5,6 +5,7 @@ export type IForms = {
     },
     type: IFormType;
     category: ICategory;
+    title?: string;
 }
 
 

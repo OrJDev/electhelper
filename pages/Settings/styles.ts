@@ -4,6 +4,6 @@ import fonts from '../../constants/fonts';
 export default StyleSheet.create({
     txt: {
         ...fonts.h3,
-        color: 'lightgray'
+        color: 'gray'
     }
 })
