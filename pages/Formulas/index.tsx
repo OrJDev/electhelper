@@ -16,7 +16,7 @@ const Formulas: React.FC<IProps> = ({ route, navigation }) => {
     const variables = React.useMemo<IValues>(() =>
         valuesIHave(currentState) as any, [currentState]);
     React.useEffect(() => {
-        if (!useLookingFor) {
+        if (!useLookingFor.get) {
             const myValuesKeys = Object.keys(variables).map(item => item.toLowerCase())
             setFormulas(getFormulas(myValuesKeys, ignoreValues.get));
         } else {
