@@ -1,13 +1,13 @@
 import React from 'react';
 import { Text } from 'react-native';
-import { Wrapper } from './components';
+import Wrapper from './components/Wrapper';
 import fonts from './constants/fonts';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import ISettings from './types/Settings';
-import { IOptionalFields, IOptionalKeys, IPossibleTypes } from './types/Values';
-import { filterdValues, getFilteredAndKeys, requirementsValues } from './functions/values';
+import { IOptionalFields, IOptionalKeys } from './types/Values';
+import { filterdValues, getFilteredAndKeys } from './functions/values';
 import forms from './constants/formulas';
-import { ICategory } from './types/Formulas';
+import { ICategory, IForms } from './types/Formulas';
 
 interface IProps { }
 
@@ -29,13 +29,12 @@ type IContext = {
     lookForValues: IGetterAdder<any[]>;
     dType: IGetterSetter<ICategory>;
     possibleFields: Partial<IOptionalFields>
-    possibleKeys: IOptionalKeys[]
+    possibleKeys: IOptionalKeys[];
+    possibleFormulas: IForms[]
 }
 const MContext = React.createContext({} as IContext)
 export default MContext;
-/**
- * @todo add more settings
- */
+
 let defaultSettings: ISettings = {
     ignoreValues: false,
     includeUnits: true,
@@ -52,6 +51,7 @@ export const ContextProvider: React.FC<IProps> = ({ children }) => {
     const [currentSettings, setCurrentSettings] = React.useState<ISettings>(defaultSettings)
     const [possibleKeys, setPossibleKeys] = React.useState<IOptionalKeys[]>([])
     const [possibleFields, setPossibleFields] = React.useState<IOptionalFields>({} as any);
+    const [possibleFormulas, setPossibleFormulas] = React.useState<IForms[]>([])
 
     React.useEffect(() => {
         (async () => {
@@ -96,6 +96,7 @@ export const ContextProvider: React.FC<IProps> = ({ children }) => {
             addKeys(newSettings.lookForValues?.transistor, 'transistor')
         }
         handleKeys(newSettings.dType ?? 'default')
+        InitKey(newSettings.dType ?? 'default', newSettings)
         setCurrentSettings(newSettings as ISettings)
     }
     const updateKeys = (newType: ICategory) => {
@@ -115,17 +116,31 @@ export const ContextProvider: React.FC<IProps> = ({ children }) => {
             .filter(e => e.toLowerCase() !== key.toLowerCase())
             :
             [...currentSettings.lookForValues[currentSettings.dType], key]
-        let [, t] = getFilteredAndKeys(arr)
+        let [f, t] = getFilteredAndKeys(arr, forms.filter(e => e.category === currentSettings.dType))
         setPossibleFields(t);
+        setPossibleFormulas(f)
+    }
+    function InitKey(type: ICategory, s?: any) {
+        let arr = s !== undefined ? s.lookForValues[type] : currentSettings.lookForValues[type]
+        let [f, t] = getFilteredAndKeys(arr, forms.filter(e => e.category === type))
+        setPossibleFields(t)
+        setPossibleFormulas(f)
     }
 
-    function addKeys(key: any[] | undefined, type: ICategory) {
-        if (key) {
-            let [, t] = getFilteredAndKeys([...currentSettings.lookForValues[type], ...key],
+    function addKeys(keys: any[] | undefined, type: ICategory) {
+        if (keys) {
+            let [f, t] = getFilteredAndKeys([...currentSettings.lookForValues[type], ...keys],
                 forms.filter(e => e.category === type))
             setPossibleFields(t)
+            setPossibleFormulas(o => ([...o, ...f]))
         }
     }
+
+    React.useEffect(() => {
+        if (!loading) {
+            InitKey(currentSettings.dType)
+        }
+    }, [currentSettings.dType])
 
     return (
         <MContext.Provider value={{
@@ -172,7 +187,8 @@ export const ContextProvider: React.FC<IProps> = ({ children }) => {
                 set: (val: ICategory) => updateKeys(val)
             },
             possibleFields,
-            possibleKeys
+            possibleKeys,
+            possibleFormulas
         }}>
             {loading ? <Wrapper>
                 <Text style={fonts.h2}>Loading...</Text>

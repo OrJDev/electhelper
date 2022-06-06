@@ -12,12 +12,16 @@ interface IProps extends RootStackScreenProps<'Formulas'> { }
 const Formulas: React.FC<IProps> = ({ route, navigation }) => {
     const [formulas, setFormulas] = React.useState<IForms[]>([]);
     const { currentState } = route.params;
-    const { ignoreValues } = React.useContext(MContext);
+    const { ignoreValues, useLookingFor, possibleFormulas } = React.useContext(MContext);
     const variables = React.useMemo<IValues>(() =>
         valuesIHave(currentState) as any, [currentState]);
     React.useEffect(() => {
-        const myValuesKeys = Object.keys(variables).map(item => item.toLowerCase())
-        setFormulas(getFormulas(myValuesKeys, ignoreValues.get));
+        if (!useLookingFor) {
+            const myValuesKeys = Object.keys(variables).map(item => item.toLowerCase())
+            setFormulas(getFormulas(myValuesKeys, ignoreValues.get));
+        } else {
+            setFormulas(possibleFormulas)
+        }
     }, [])
 
     return (

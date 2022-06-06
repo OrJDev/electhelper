@@ -2,7 +2,7 @@ import React from 'react';
 import { ArrowBack, Clicker, KeysInput, KeysPicker, Wrapper } from '../../components';
 import styles from './styles';
 import { getterAndSetter } from '../../functions/values';
-import { IPossibleTypes, ITransistor, IValues } from '../../types/Values';
+import { IOptionalFields, IPossibleTypes, ITransistor, IValues } from '../../types/Values';
 import { isTransistor } from '../../functions/values';
 import { defaultValues, transValues } from '../../constants/stateValues';
 import { useNavigation } from '@react-navigation/native';
@@ -21,7 +21,10 @@ const Home: React.FC<IProps> = ({ }) => {
         getterAndSetter([setValues, setTransistorValues], [values, transistorValues], displayType);
     const clearState = () => setCurrentState(isTransistor(displayType) ? transValues : defaultValues);
     const navigateTo = () => navigation.navigate('Formulas', { currentState })
-
+    const [fields, setFields] = React.useState<Partial<IOptionalFields>>({});
+    React.useEffect(() => {
+        setFields(possibleFields)
+    }, [possibleFields])
     return (
         <Wrapper arrow={
             <>
@@ -29,16 +32,19 @@ const Home: React.FC<IProps> = ({ }) => {
                 {sDisplay ? <ArrowBack right name='check' onPress={navigateTo} /> : null}
             </>
         } onSDisplay={(v) => setSDisplay(v)}>
-            <KeysPicker
+            {useLookingFor.get ? null : <KeysPicker
                 selectedValue={displayType}
                 setValue={setDisplayType}
                 label='Display type'
                 values={['transistor', 'solver']}
-            />
+            />}
             <KeysInput
-                keys={currentState}
+                keys={useLookingFor.get ? fields : currentState}
                 style={styles.smTop}
-                setItem={(key, val) => setCurrentState(old => ({ ...old, [key]: val }))}
+                setItem={(key, val) => useLookingFor.get ?
+                    setFields(e => ({ ...e, [key]: val }))
+                    :
+                    setCurrentState(old => ({ ...old, [key]: val }))}
             />
             <Clicker
                 label='Submit'

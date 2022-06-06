@@ -4,7 +4,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Navigation from './navigation';
 import { useFonts } from '@use-expo/font';
 import { Paths } from './constants/fonts';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, LogBox } from 'react-native';
 import { ContextProvider } from './context';
 
 export default function App() {
