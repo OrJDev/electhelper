@@ -29,9 +29,8 @@ const Settings: React.FC<IProps> = ({ }) => {
                         {
                             backgroundColor: lookForValues.get.includes(item) ? 'gray' : 'lightgray'
                         }]} key={index}
-                            onPress={() =>
-                                lookForValues[lookForValues.get.includes(item) ? 'remove' : 'add']
-                                    (item)
+                            onPress={() => lookForValues[lookForValues.get.includes(item) ? 'remove' : 'add']
+                                (item)
                             }>
                             <Text style={styles.keyItemText}>{item}</Text>
                         </TouchableOpacity>

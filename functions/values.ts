@@ -39,8 +39,8 @@ export const getterAndSetter = (
     }
 }
 
-export const requirementsValues = (formulas: IForms[]): { [key: string]: number } => {
-    let currentValues: { [key: string]: number } = {};
+export const requirementsValues = (formulas: IForms[]): any => {
+    let currentValues: any = {};
     for (const element of formulas) {
         for (const requirement of
             element.requirements.
@@ -56,7 +56,7 @@ export const filterdValues = (wantedKeys: string[], f?: IForms[], b?: boolean): 
     let formulasFound: any[] = []
     for (const element of f ? f : forms) {
         let temp: any = {}
-        let keys = f ? Object.keys(element.formulas) : Object.keys(element.formulas).
+        let keys = b ? Object.keys(element.formulas) : Object.keys(element.formulas).
             filter(e => wantedKeys.indexOf(e) !== -1);
         if (keys.length === 0) continue;
         keys.forEach(key => {
@@ -76,8 +76,8 @@ export const filterdValues = (wantedKeys: string[], f?: IForms[], b?: boolean): 
     return b ? formulasFound : newResults;
 }
 
-export const getFilteredAndKeys = (wantedKeys: IOptionalKeys[]): [IForms[], any] => {
-    let results = filterdValues(wantedKeys.map(e => e.toLowerCase()));
+export const getFilteredAndKeys = (wantedKeys: IOptionalKeys[], form?: IForms[]): [IForms[], any] => {
+    let results = filterdValues(wantedKeys.map(e => e.toLowerCase()), form);
     let requirements = requirementsValues(results)
     return [results, requirements]
 }

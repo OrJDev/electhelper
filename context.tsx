@@ -26,8 +26,9 @@ type IContext = {
     includeUnits: IGetterSetter;
     holdForModal: IGetterSetter;
     useLookingFor: IGetterSetter;
-    lookForValues: IGetterAdder<any[]>
+    lookForValues: IGetterAdder<any[]>;
     dType: IGetterSetter<ICategory>;
+    possibleFields: Partial<IOptionalFields>
     possibleKeys: IOptionalKeys[]
 }
 const MContext = React.createContext({} as IContext)
@@ -40,7 +41,10 @@ let defaultSettings: ISettings = {
     includeUnits: true,
     holdForModal: true,
     useLookingFor: false,
-    lookForValues: [],
+    lookForValues: {
+        transistor: [],
+        default: []
+    },
     dType: 'default'
 }
 export const ContextProvider: React.FC<IProps> = ({ children }) => {
@@ -63,15 +67,12 @@ export const ContextProvider: React.FC<IProps> = ({ children }) => {
 
     async function updateStorage(valueKey: keyof ISettings, value: any) {
         try {
-            await AsyncStorage.setItem('settings', JSON.stringify({ ...currentSettings, [valueKey]: value }))
             setCurrentSettings({ ...currentSettings, [valueKey]: value })
+            await AsyncStorage.setItem('settings', JSON.stringify({ ...currentSettings, [valueKey]: value }))
         } catch { }
     }
     const getProperty = (key: keyof ISettings): any => {
-        let results = currentSettings.hasOwnProperty(key) ?
-            currentSettings[key] :
-            defaultSettings[key];
-        // if (key === 'lookForValues') console.log({ results })
+        let results: any = currentSettings[key] ?? defaultSettings[key];
         return results;
     }
 
@@ -90,21 +91,40 @@ export const ContextProvider: React.FC<IProps> = ({ children }) => {
         }
         if (shouldBeSet) {
             await AsyncStorage.setItem('settings', JSON.stringify(newSettings))
+        } else {
+            addKeys(newSettings.lookForValues?.default, 'default')
+            addKeys(newSettings.lookForValues?.transistor, 'transistor')
         }
         handleKeys(newSettings.dType ?? 'default')
         setCurrentSettings(newSettings as ISettings)
     }
-    async function updateKeys(newType: ICategory) {
-        handleKeys(newType)
+    const updateKeys = (newType: ICategory) => {
         updateStorage('dType', newType)
+        handleKeys(newType)
+        setPossibleFields({} as any)
     }
 
     function handleKeys(newType: ICategory) {
         let formulas = forms.filter(e => e.category === newType);
-        let keyResults = requirementsValues(formulas);
-        setPossibleFields(keyResults as any)
         let optionalKeys = filterdValues([], formulas, true)
         setPossibleKeys(optionalKeys as any)
+    }
+
+    function updateKey(key: any, r?: boolean) {
+        let arr = r ? currentSettings.lookForValues[currentSettings.dType]
+            .filter(e => e.toLowerCase() !== key.toLowerCase())
+            :
+            [...currentSettings.lookForValues[currentSettings.dType], key]
+        let [, t] = getFilteredAndKeys(arr)
+        setPossibleFields(t);
+    }
+
+    function addKeys(key: any[] | undefined, type: ICategory) {
+        if (key) {
+            let [, t] = getFilteredAndKeys([...currentSettings.lookForValues[type], ...key],
+                forms.filter(e => e.category === type))
+            setPossibleFields(t)
+        }
     }
 
     return (
@@ -122,15 +142,25 @@ export const ContextProvider: React.FC<IProps> = ({ children }) => {
                 set: (val: boolean) => updateStorage('holdForModal', val)
             },
             lookForValues: {
-                get: getProperty('lookForValues'),
+                get: getProperty('lookForValues')[currentSettings.dType] ?? [],
                 add: (val: any) => {
-                    updateStorage('lookForValues', [...currentSettings.lookForValues, val])
+                    updateKey(val);
+                    let newObj: any = {
+                        ...currentSettings.lookForValues,
+                        [currentSettings.dType]:
+                            [...currentSettings.lookForValues[currentSettings.dType], val]
+                    }
+                    updateStorage('lookForValues', newObj)
                 },
                 remove: (val: any) => {
-                    let newValues = currentSettings.lookForValues
-                        .filter(r => r.toLowerCase() !== val.toLowerCase())
-                    updateStorage('lookForValues', newValues)
-
+                    updateKey(val, true);
+                    let newObj = {
+                        ...currentSettings.lookForValues,
+                        [currentSettings.dType]:
+                            currentSettings.lookForValues[currentSettings.dType]
+                                .filter(r => r.toLowerCase() !== val.toLowerCase())
+                    }
+                    updateStorage('lookForValues', newObj)
                 }
             },
             useLookingFor: {
@@ -141,6 +171,7 @@ export const ContextProvider: React.FC<IProps> = ({ children }) => {
                 get: getProperty('dType'),
                 set: (val: ICategory) => updateKeys(val)
             },
+            possibleFields,
             possibleKeys
         }}>
             {loading ? <Wrapper>

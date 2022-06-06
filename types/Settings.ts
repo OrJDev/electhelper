@@ -5,6 +5,9 @@ export default interface ISettings {
     includeUnits: boolean;
     holdForModal: boolean;
     useLookingFor: boolean;
-    lookForValues: any[];
+    lookForValues: {
+        transistor: any[];
+        default: any[]
+    };
     dType: ICategory;
 }

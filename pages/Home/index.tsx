@@ -6,11 +6,13 @@ import { IPossibleTypes, ITransistor, IValues } from '../../types/Values';
 import { isTransistor } from '../../functions/values';
 import { defaultValues, transValues } from '../../constants/stateValues';
 import { useNavigation } from '@react-navigation/native';
+import MContext from '../../context';
 
 interface IProps { }
 
 const Home: React.FC<IProps> = ({ }) => {
     const navigation = useNavigation();
+    const { lookForValues, useLookingFor, possibleFields } = React.useContext(MContext)
     let [displayType, setDisplayType] = React.useState<IPossibleTypes>('solver');
     const [values, setValues] = React.useState<IValues>(defaultValues);
     const [transistorValues, setTransistorValues] = React.useState<ITransistor>(transValues)
@@ -19,6 +21,7 @@ const Home: React.FC<IProps> = ({ }) => {
         getterAndSetter([setValues, setTransistorValues], [values, transistorValues], displayType);
     const clearState = () => setCurrentState(isTransistor(displayType) ? transValues : defaultValues);
     const navigateTo = () => navigation.navigate('Formulas', { currentState })
+
     return (
         <Wrapper arrow={
             <>
