@@ -2,9 +2,9 @@ import formulas from "../constants/formulas"
 import { IForms } from "../types/formulas"
 import { IOptionalFields } from "../types/Values";
 
-export const getFormulas = (valuesIHave: any[], ignore?: boolean): IForms[] => {
-    let results = formulas.filter(e => e.requirements.map(item => item.toLowerCase())
-        .every(e => valuesIHave.indexOf(e) !== -1));
+export const getFormulas = (valuesIHave: any[], customForms?: IForms[], ignore?: boolean): IForms[] => {
+    let results = (customForms ?? formulas).
+        filter(e => e.requirements.map(item => item.toLowerCase()).every(e => valuesIHave.indexOf(e) !== -1));
     if (ignore) {
         let newResults = []
         for (const element of results) {

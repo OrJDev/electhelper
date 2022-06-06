@@ -20,7 +20,11 @@ const Home: React.FC<IProps> = ({ }) => {
     const [currentState, setCurrentState] =
         getterAndSetter([setValues, setTransistorValues], [values, transistorValues], displayType);
     const clearState = () => setCurrentState(isTransistor(displayType) ? transValues : defaultValues);
-    const navigateTo = () => navigation.navigate('Formulas', { currentState })
+    const navigateTo = () => navigation.navigate('Formulas', {
+        currentState: useLookingFor.get ?
+            fields as any :
+            currentState
+    })
     const [fields, setFields] = React.useState<Partial<IOptionalFields>>({});
     React.useEffect(() => {
         setFields(possibleFields)
