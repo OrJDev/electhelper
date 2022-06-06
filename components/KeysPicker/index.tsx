@@ -8,12 +8,13 @@ interface IProps {
     values: any[];
     selectedValue: any;
     label: string;
+    f?: boolean;
 }
 
-const KeysPicker: React.FC<IProps> = ({ values, setValue, label, selectedValue }) => {
+const KeysPicker: React.FC<IProps> = ({ values, setValue, label, selectedValue, f }) => {
     return (
         <>
-            <Text style={styles.top}>Choose a {label}</Text>
+            <Text style={styles.top}>{f ? label : `Choose a ${label}`}</Text>
             {values.map((item, index) => {
                 return (
                     <Clicker

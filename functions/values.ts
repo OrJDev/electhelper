@@ -2,7 +2,7 @@ import React from "react";
 import forms from "../constants/formulas";
 import { transValues } from "../constants/stateValues";
 import { ICategory, IForms } from "../types/Formulas";
-import { IOptionalFields, IPossibleTypes, ITransistor, IValues } from "../types/Values";
+import { IOptionalFields, IOptionalKeys, IPossibleTypes, ITransistor, IValues } from "../types/Values";
 
 export const arrayToMap = (arr: any[]) => arr.reduce((acc, key) => {
     acc[key] = NaN;
@@ -39,10 +39,9 @@ export const getterAndSetter = (
     }
 }
 
-export const requirementsValues = (category: ICategory): { [key: string]: number } => {
+export const requirementsValues = (formulas: IForms[]): { [key: string]: number } => {
     let currentValues: { [key: string]: number } = {};
-    let filterCategory = forms.filter(e => e.category === category);
-    for (const element of filterCategory) {
+    for (const element of formulas) {
         for (const requirement of
             element.requirements.
                 filter(e => currentValues[e] === undefined)) {
@@ -52,15 +51,34 @@ export const requirementsValues = (category: ICategory): { [key: string]: number
     return currentValues;
 }
 
-export const filterdValues = (wantedKeys: string[]): IForms[] => {
+export const filterdValues = (wantedKeys: string[], f?: IForms[], b?: boolean): IForms[] | any[] => {
     let newResults: IForms[] = []
-    for (const element of forms) {
+    let formulasFound: any[] = []
+    for (const element of f ? f : forms) {
         let temp: any = {}
-        let keys = Object.keys(element.formulas).
+        let keys = f ? Object.keys(element.formulas) : Object.keys(element.formulas).
             filter(e => wantedKeys.indexOf(e) !== -1);
         if (keys.length === 0) continue;
-        keys.forEach(key => temp[key] = element.formulas[key])
+        keys.forEach(key => {
+            temp[key] = element.formulas[key]
+            formulasFound.push(key)
+        })
         newResults.push({ ...element, formulas: temp })
+
     }
-    return newResults;
+    if (b) {
+        let current: any = []
+        formulasFound.forEach(e => {
+            if (current.indexOf(e) === -1) current.push(e)
+        })
+        formulasFound = current;
+    }
+    return b ? formulasFound : newResults;
 }
+
+export const getFilteredAndKeys = (wantedKeys: IOptionalKeys[]): [IForms[], any] => {
+    let results = filterdValues(wantedKeys.map(e => e.toLowerCase()));
+    let requirements = requirementsValues(results)
+    return [results, requirements]
+}
+
