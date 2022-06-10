@@ -1,7 +1,7 @@
-import { Entypo, MaterialIcons } from '@expo/vector-icons';
+import { Entypo, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
-import { Home, Settings } from '../pages';
+import { Current, Home, Settings } from '../pages';
 import { RootTabParamList } from "../types";
 import styles from './styles';
 
@@ -35,6 +35,17 @@ const TabsNavigator: React.FC<IProps> = ({ }) => {
             }}
                 name="Settings"
                 component={Settings}
+            />
+            <Tabs.Screen options={{
+                tabBarIcon: ({ color, size, focused }) => (
+                    <MaterialCommunityIcons
+                        color={color}
+                        size={focused ? size * 1.5 : size * 1.2}
+                        name="current-dc" />
+                )
+            }}
+                name="Current"
+                component={Current}
             />
         </Tabs.Navigator>
     )

@@ -18,7 +18,8 @@ const Formulas: React.FC<IProps> = ({ route, navigation }) => {
     React.useEffect(() => {
         const myValuesKeys = Object.keys(variables).map(item => item.toLowerCase())
         let results = getFormulas(myValuesKeys,
-            useLookingFor.get ? possibleFormulas : undefined,
+            useLookingFor.get ? 
+            possibleFormulas : undefined,
             ignoreValues.get);
         setFormulas(results);
     }, [])

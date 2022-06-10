@@ -3,7 +3,6 @@ import fonts from '../../constants/fonts';
 
 export default StyleSheet.create({
     container: {
-        flex: 1,
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'center'
@@ -28,6 +27,7 @@ export default StyleSheet.create({
     },
     text: {
         ...fonts.h2,
+        color: 'black',
         textTransform: 'uppercase'
     },
     equals: {

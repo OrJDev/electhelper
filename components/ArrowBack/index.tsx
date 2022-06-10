@@ -1,6 +1,6 @@
-import { AntDesign } from '@expo/vector-icons';
+import exp, { AntDesign } from '@expo/vector-icons';
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, ViewStyle } from 'react-native';
 import styles from './styles';
 import Animated, {
     Easing,
@@ -15,17 +15,20 @@ interface IProps {
     onPress: () => void;
     name?: string;
     right?: boolean;
+    size?: number;
+    noAnimation?: boolean;
+    style?: ViewStyle;
+    MIcon?: any;
 }
 
-const ArrowBack: React.FC<IProps> = ({ onPress, name, right }) => {
+const ArrowBack: React.FC<IProps> = ({ onPress, name, right, size, noAnimation, style, MIcon }) => {
     let x = useSharedValue(0);
-
     let handlePress = () => x.value = withSequence(
         withTiming(1, { duration: 250, easing: Easing.linear }),
         withSpring(0),
     )
 
-    let animatedStyle = useAnimatedStyle(() => {
+    let animatedStyle = noAnimation ? {} : useAnimatedStyle(() => {
         return {
             transform: [
                 {
@@ -37,13 +40,17 @@ const ArrowBack: React.FC<IProps> = ({ onPress, name, right }) => {
         }
     })
     return (
-        <TouchableOpacity style={[styles.container, styles[right ? 'right' : 'left']]} onPress={() => {
+        <TouchableOpacity style={[styles.container, styles[right ? 'right' : 'left'], style]} onPress={() => {
             handlePress();
             onPress()
         }}>
             <Animated.View style={[animatedStyle]}>
-                <AntDesign name={name ? name as any : 'arrowleft'} size={30} color='black' />
-
+                {MIcon ??
+                    <AntDesign
+                        name={name ? name as any : 'arrowleft'}
+                        size={size ?? 30}
+                        color='black' />
+                }
             </Animated.View>
         </TouchableOpacity>
     )

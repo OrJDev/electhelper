@@ -7,13 +7,15 @@ import styles from './styles';
 interface IProps {
     arrow?: any;
     onSDisplay?: (val: boolean) => void;
+    additionalChildren?: any;
 }
 
-const Wrapper: React.FC<IProps> = ({ children, arrow, onSDisplay }) => {
+const Wrapper: React.FC<IProps> = ({ children, arrow, onSDisplay, additionalChildren }) => {
     return (
         <View style={[{ alignItems: 'center' }, styles.container]}>
             <Logo />
             {arrow}
+            {additionalChildren}
             <KeyboardAwareScrollView
                 onKeyboardDidHide={() => onSDisplay && onSDisplay(false)}
                 onKeyboardDidShow={() => onSDisplay && onSDisplay(true)}

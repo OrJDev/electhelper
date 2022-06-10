@@ -4,8 +4,12 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Navigation from './navigation';
 import { useFonts } from '@use-expo/font';
 import { Paths } from './constants/fonts';
-import { ActivityIndicator, LogBox } from 'react-native';
+import { ActivityIndicator } from 'react-native';
 import { ContextProvider } from './context';
+import 'nerdamer/nerdamer.core'
+import 'nerdamer/Algebra'
+import 'nerdamer/Calculus'
+import 'nerdamer/Solve'
 
 export default function App() {
   const [isReady] = useFonts(Paths)
