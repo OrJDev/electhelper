@@ -185,9 +185,10 @@ function getSFor(formula: string): string | null {
 // d = y of the second
 // n = eq of the second
 
+
 export function solveTwoUnknowns(a: number, b: number, m: number, c: number, d: number, n: number) {
-    let x = (m * b - m * d - n * a) / (m * c - n * b);
-    let y = (m * d - n * c) / (m * c - n * b);
+    let alpha = (b * c - a * d);
+    let x = (n * b - m * d) / alpha
+    let y = (m * c - n * a) / alpha
     return { x, y }
 }
-
