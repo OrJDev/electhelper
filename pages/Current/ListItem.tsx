@@ -7,7 +7,7 @@ import CurrentInput from './CurrentInput';
 import { Currents, IResistor, IVoltage } from '../../types/Builder';
 import styles from './styles';
 
-interface IProps {
+export interface IProps {
     item: IResistor | IVoltage
     setResist: React.Dispatch<React.SetStateAction<IFirstSecond>>;
     type: IFirstSecondKeys;

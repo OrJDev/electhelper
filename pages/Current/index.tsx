@@ -75,13 +75,14 @@ const Current: React.FC<IProps> = ({ }) => {
         setDisplayType('voltage')
     }
 
+    const formatName = (mName?: string) => parseInt(
+        mName?.toLowerCase().replace('u', '').replace('r', '')
+        ?? '0'
+    );
     function getId(ke: any[]): number {
         if (ke.length) {
-            let f = ke[ke.length - 1].name
-                .toLowerCase()
-                .replace('u', '').
-                replace('r', '')
-            return (parseInt(f) + 1);
+            let f = formatName(ke[ke.length - 1].name)
+            return (f + 1);
         }
         return 1;
     }
@@ -91,22 +92,25 @@ const Current: React.FC<IProps> = ({ }) => {
         let voltages = resolveVoltage();
         let exp = `${voltages} = ${resistors}`
         setFormulas(o => ({ ...o, [current]: exp }))
-    }, [flows])
+    }, [flows, selectedItems])
 
     function resolveVoltage() {
         let voltages = flows[current].voltage;
-        return voltages.reduce((acc, curr, index) => {
-            if (isNaN(curr.value)) return acc;
-            if (curr.resisted) {
-                return acc + ` ${index === 0 ? '-' : ' - '}${curr.value}`
-            }
-            if (index !== 0) return acc + ` + ${curr.value}`
-            return acc + ` ${curr.value}`;
-        }, '')
+        return voltages.
+            sort((a, b) => formatName(a.name) - formatName(b.name))
+            .reduce((acc, curr, index) => {
+                if (isNaN(curr.value)) return acc;
+                if (curr.resisted) {
+                    return acc + ` ${index === 0 ? '-' : ' - '}${curr.value}`
+                }
+                if (index !== 0) return acc + ` + ${curr.value}`
+                return acc + ` ${curr.value}`;
+            }, '')
     }
     function resolveResistors() {
         let tempResistors = ''
-        let resistors = flows[current].resistors.filter(e => e.includeCurrents.length);
+        let resistors = flows[current].resistors.filter(e => e.includeCurrents.length).
+            sort((a, b) => formatName(a.name) - formatName(b.name));
         for (const element in resistors) {
             let resistor = resistors[element]
             let tmp = resistor.value;
@@ -137,7 +141,7 @@ const Current: React.FC<IProps> = ({ }) => {
     return (
         <Wrapper
             additionalChildren={
-                <View>
+                <View style={{ alignItems: 'center' }}>
                     <Picker items={['first', 'second']} onChange={setCurrent} currentItm={current} />
                     <Picker items={['voltage', 'resistor']} onChange={setDisplayType} currentItm={displayType} />
                     {formulas[current].length ? <View style={styles.formWrapper}>
@@ -188,8 +192,8 @@ const Current: React.FC<IProps> = ({ }) => {
                     {flows[current][displayType === 'resistor' ? 'resistors' : 'voltage'].
                         map((item, index) => (
                             <ListItem
-                                item={item}
                                 key={index}
+                                item={item}
                                 setResist={setFlows}
                                 type={current}
                                 elKey={displayType === 'resistor' ? 'resistors' : 'voltage'}
