@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { Formulas, Results } from '../pages';
+import { CurrentResults, Formulas, Results } from '../pages';
 import { RootStackParamList } from '../types';
 import TabsNavigator from './TabsNavigator';
 
@@ -17,6 +17,7 @@ const Navigation: React.FC<IProps> = ({ }) => {
             }}>
                 <Stack.Screen name="Tabs" component={TabsNavigator} />
                 <Stack.Screen name="Results" component={Results} />
+                <Stack.Screen name="CurrentResults" component={CurrentResults} />
                 <Stack.Screen name="Formulas" component={Formulas} />
             </Stack.Group>
         </Stack.Navigator>

@@ -20,6 +20,22 @@ export type RootStackParamList = {
     variables: Partial<IOptionalFields>;
     sFor: string;
     sType: IFormType;
+  };
+  CurrentResults: {
+    formula1: string;
+    formula2: string;
+    count: {
+      first: {
+        I1: number;
+        I2: number;
+        eq: number;
+      },
+      second: {
+        I1: number;
+        I2: number;
+        eq: number;
+      }
+    }
   }
 };
 

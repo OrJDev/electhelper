@@ -6,6 +6,7 @@ import { IFirstSecond, IFirstSecondKeys } from '../../types/Builder';
 import CurrentInput from './CurrentInput';
 import { Currents, IResistor, IVoltage } from '../../types/Builder';
 import styles from './styles';
+import { sortList } from './index';
 
 export interface IProps {
     item: IResistor | IVoltage
@@ -20,15 +21,15 @@ const Resistor: React.FC<IProps> = ({ item, setResist, type, elKey }) => {
             setResist(e => ({
                 ...e, [type]: {
                     ...e[type],
-                    voltage: [...e[type].voltage.filter(e => e.name !== item.name),
-                    { ...item, resisted: !item.resisted }]
+                    voltage: sortList([...e[type].voltage.filter(e => e.name !== item.name),
+                    { ...item, resisted: !item.resisted }])
                 }
             }))
         } else {
             setResist(e => ({
                 ...e, [type]: {
                     ...e[type],
-                    resistors: [...e[type].resistors.filter(e => e.name !== item.name),
+                    resistors: sortList([...e[type].resistors.filter(e => e.name !== item.name),
                     {
                         ...item,
                         includeCurrents: item.includeCurrents.includes(current) ?
@@ -36,7 +37,7 @@ const Resistor: React.FC<IProps> = ({ item, setResist, type, elKey }) => {
                             :
                             [...item.includeCurrents, current]
                     }
-                    ]
+                    ])
                 }
             }))
 

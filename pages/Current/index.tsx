@@ -16,10 +16,26 @@ import {
     Currents,
     ItemsToMap
 } from '../../types/Builder';
-
+import { useNavigation } from '@react-navigation/native';
 interface IProps { }
 
-
+export const sortList = (list: any[]) => list.sort((a, b) => formatName(a.name) - formatName(b.name));
+export const formatName = (mName?: string) => parseInt(
+    mName?.toLowerCase().replace('u', '').replace('r', '').replace('i', '')
+    ?? '0'
+);
+const defaultCount = {
+    first: {
+        I1: 0,
+        I2: 0,
+        eq: 0
+    },
+    second: {
+        I1: 0,
+        I2: 0,
+        eq: 0
+    }
+}
 const Current: React.FC<IProps> = ({ }) => {
     const [displayItms, setDisplayItems] = React.useState(false);
     const [current, setCurrent] = React.useState<IFirstSecondKeys>('first');
@@ -27,7 +43,8 @@ const Current: React.FC<IProps> = ({ }) => {
     const [displayType, setDisplayType] = React.useState<'voltage' | 'resistor'>('resistor');
     const [flows, setFlows] = React.useState<IFirstSecond>(defaultFirstSecond);
     const [formulas, setFormulas] = React.useState({ first: '', second: '' })
-
+    const [count, setCount] = React.useState(defaultCount)
+    const navigation = useNavigation();
     function Picker({ onChange, currentItm, items }:
         { onChange: (item: any) => void; currentItm: any; items: any[] }) {
         return <View style={styles.row}>
@@ -46,7 +63,7 @@ const Current: React.FC<IProps> = ({ }) => {
         let id = getId(flows[current].resistors)
         let newObj: IResistor = {
             name: `R${id}`,
-            includeCurrents: [],
+            includeCurrents: ['I1'],
             value: NaN
         }
         setFlows(f => ({
@@ -75,10 +92,7 @@ const Current: React.FC<IProps> = ({ }) => {
         setDisplayType('voltage')
     }
 
-    const formatName = (mName?: string) => parseInt(
-        mName?.toLowerCase().replace('u', '').replace('r', '')
-        ?? '0'
-    );
+
     function getId(ke: any[]): number {
         if (ke.length) {
             let f = formatName(ke[ke.length - 1].name)
@@ -92,14 +106,28 @@ const Current: React.FC<IProps> = ({ }) => {
         let voltages = resolveVoltage();
         let exp = `${voltages} = ${resistors}`
         setFormulas(o => ({ ...o, [current]: exp }))
+        setCount(e => ({ ...e, [current]: resolveMap() }))
     }, [flows, selectedItems])
+
+    function resolveMap() {
+        let map = { I1: 0, I2: 0 }
+        for (const element of flows[current].resistors.filter(e => !isNaN(e.value))) {
+            element.includeCurrents.forEach((item, index) => {
+                if (index === 1 && selectedItems.I1 === selectedItems.I2) {
+                    map[item] -= parseFloat(element.value as any)
+                } else {
+                    map[item] += parseFloat(element.value as any);
+                }
+            })
+        }
+        let eq = flows[current].voltage.reduce((acc, curr) => acc + parseFloat(curr.value as any), 0)
+        return { ...map, eq }
+    }
 
     function resolveVoltage() {
         let voltages = flows[current].voltage;
-        return voltages.
-            sort((a, b) => formatName(a.name) - formatName(b.name))
+        return voltages.filter(e => !isNaN(e.value))
             .reduce((acc, curr, index) => {
-                if (isNaN(curr.value)) return acc;
                 if (curr.resisted) {
                     return acc + ` ${index === 0 ? '-' : ' - '}${curr.value}`
                 }
@@ -108,24 +136,20 @@ const Current: React.FC<IProps> = ({ }) => {
             }, '')
     }
     function resolveResistors() {
-        let tempResistors = ''
-        let resistors = flows[current].resistors.filter(e => e.includeCurrents.length).
-            sort((a, b) => formatName(a.name) - formatName(b.name));
-        for (const element in resistors) {
-            let resistor = resistors[element]
-            let tmp = resistor.value;
-            if (isNaN(tmp)) tmp = 0;
-            if (resistor.includeCurrents.length > 1) {
-                let action = '+';
-                if (selectedItems.I1 == selectedItems.I2) {
-                    action = '-'
+        return flows[current].resistors.
+            filter(e => e.includeCurrents.length)
+            .reduce((acc, curr, index) => {
+                let tmp = curr.value;
+                if (isNaN(tmp)) tmp = 0;
+                let beingLine = index === 0 ? '' : tmp >= 0 ? ' + ' : '';
+                if (curr.includeCurrents.length > 1) {
+                    let action = selectedItems.I1 === selectedItems.I2 ? '-' : '+'
+                    let [first, second] = curr.includeCurrents;
+                    return acc + `${beingLine}${tmp}(${first} ${action} ${second})`
+                } else {
+                    return acc + `${beingLine}${tmp}${curr.includeCurrents[0]}`
                 }
-                tempResistors += `${tmp} (${resistor.includeCurrents[0]} ${action} ${resistor.includeCurrents[1]}) `
-            } else {
-                tempResistors += ` + ${tmp}${resistor.includeCurrents[0]}`
-            }
-        }
-        return tempResistors;
+            }, '')
     }
 
 
@@ -138,6 +162,15 @@ const Current: React.FC<IProps> = ({ }) => {
             return voltage.length;
         }
     }
+    const canBePressed = count.first.eq > 0 && count.second.eq > 0 && (
+        count.second.I1 > 0
+        ||
+        count.first.I1 > 0
+        ||
+        count.second.I2 > 0
+        ||
+        count.first.I2 > 0
+    )
     return (
         <Wrapper
             additionalChildren={
@@ -168,6 +201,19 @@ const Current: React.FC<IProps> = ({ }) => {
                     noAnimation
                     onPress={() => setDisplayItems(e => !e)}
                 />
+                {canBePressed ? <ArrowBack
+                    name='check'
+                    size={25}
+                    style={{ top: 80 }}
+                    noAnimation
+                    onPress={() => navigation.navigate('CurrentResults',
+                        {
+                            formula1: formulas.first,
+                            formula2: formulas.second,
+                            count
+                        })}
+                /> : null}
+
             </>}>
             {displayItms ? (<>
                 {Currents.map((itm, idx) => {

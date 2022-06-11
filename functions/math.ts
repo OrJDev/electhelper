@@ -176,3 +176,18 @@ function getSFor(formula: string): string | null {
     }
     return sFor;
 }
+
+// a = x of the first
+// b = y of the first
+// m = eq of the second
+
+// c = x of the second
+// d = y of the second
+// n = eq of the second
+
+export function solveTwoUnknowns(a: number, b: number, m: number, c: number, d: number, n: number) {
+    let x = (m * b - m * d - n * a) / (m * c - n * b);
+    let y = (m * d - n * c) / (m * c - n * b);
+    return { x, y }
+}
+
