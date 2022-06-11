@@ -16,7 +16,7 @@ const CurrentResults: React.FC<IProps> = ({ route, navigation }) => {
         let results = solveTwoUnknowns(first.I1, first.I2, first.eq,
             second.I1, second.I2, second.eq
         );
-        setResults({ I1: results.x.toFixed(3), I2: results.y.toFixed(3) });
+        setResults({ I1: results.x, I2: results.y });
     }, [])
     return (
         <Wrapper arrow={<ArrowBack onPress={() => navigation.goBack()} />}>

@@ -188,7 +188,8 @@ function getSFor(formula: string): string | null {
 
 export function solveTwoUnknowns(a: number, b: number, m: number, c: number, d: number, n: number) {
     let alpha = (b * c - a * d);
-    let x = (n * b - m * d) / alpha
-    let y = (m * c - n * a) / alpha
+    let x = ((n * b - m * d) / alpha).toFixed(3)
+    let y = ((m * c - n * a) / alpha).toFixed(3)
     return { x, y }
 }
+
