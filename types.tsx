@@ -1,6 +1,7 @@
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { IFlows } from './types/Builder';
 import { IFormType } from './types/Formulas';
 import { IOptionalFields } from './types/Values';
 
@@ -35,7 +36,8 @@ export type RootStackParamList = {
         I2: number;
         eq: number;
       }
-    }
+    },
+    directions: { I1: IFlows, I2: IFlows };
   }
 };
 

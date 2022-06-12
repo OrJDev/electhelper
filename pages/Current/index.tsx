@@ -63,7 +63,7 @@ const Current: React.FC<IProps> = ({ }) => {
         let id = getId(flows[current].resistors)
         let newObj: IResistor = {
             name: `R${id}`,
-            includeCurrents: ['I1'],
+            includeCurrents: [current === 'first' ? 'I1' : 'I2'],
             value: NaN
         }
         setFlows(f => ({
@@ -210,7 +210,8 @@ const Current: React.FC<IProps> = ({ }) => {
                         {
                             formula1: formulas.first,
                             formula2: formulas.second,
-                            count
+                            count,
+                            directions: selectedItems
                         })}
                 /> : null}
 
